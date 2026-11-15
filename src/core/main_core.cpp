@@ -3,6 +3,7 @@
 #include "logger.h"
 #include "viewer_iface.h"
 #include <iostream>
+using namespace std;
 
 int main() {
     // Player State Primitives
@@ -28,19 +29,19 @@ int main() {
     const char* initStateFile = "data/initial-state.txt";
 
     if (!loadBuildingMap(mapFile, horizontalConn, roomEntities, entityCounts)) {
-        std::cerr << "Error: Could not load " << mapFile << "\n";
+        cout << "Error: Could not load " << mapFile << "\n";
         return 1;
     }
 
     if (!loadInitialState(initStateFile, playerFloor, playerRoom, energy, time, score,
                           inventory, inventoryCount, objectives, emergencyTripsLeft)) {
-        std::cerr << "Error: Could not load " << initStateFile << "\n";
+        cout << "Error: Could not load " << initStateFile << "\n";
         return 1;
     }
 
-    std::cout << "===========================================\n";
-    std::cout << " THE LAST TRAIN - SIMULATION INITIALIZED   \n";
-    std::cout << "===========================================\n";
+    cout << "===========================================\n";
+    cout << " THE LAST TRAIN - SIMULATION INITIALIZED   \n";
+    cout << "===========================================\n";
 
     runSimulation(playerFloor, playerRoom, energy, time, score,
                   inventory, inventoryCount, objectives, emergencyTripsLeft,
