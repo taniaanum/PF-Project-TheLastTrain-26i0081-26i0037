@@ -28,5 +28,5 @@ void renderObjectivesChecklist(const bool objectives[NUM_OBJECTIVES]){
 
 
 
-    
+
 }

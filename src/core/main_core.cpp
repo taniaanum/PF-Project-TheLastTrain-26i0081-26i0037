@@ -1,11 +1,19 @@
 #include "simulator.h"
 #include "level.h"
 #include "logger.h"
+#include"physics.h"
+#include "util.h"
 #include "viewer_iface.h"
 #include <iostream>
 using namespace std;
 
 int main() {
+
+
+
+
+
+
     // Player State Primitives
     int playerFloor = 1;
     int playerRoom = 1;
@@ -46,6 +54,24 @@ int main() {
     runSimulation(playerFloor, playerRoom, energy, time, score,
                   inventory, inventoryCount, objectives, emergencyTripsLeft,
                   horizontalConn, roomEntities, entityCounts);
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
 
     return 0;
 }
