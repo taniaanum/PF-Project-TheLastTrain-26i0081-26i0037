@@ -1,0 +1,3 @@
+/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build/CMakeFiles/last_train.dir
+/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build/CMakeFiles/edit_cache.dir
+/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build/CMakeFiles/rebuild_cache.dir

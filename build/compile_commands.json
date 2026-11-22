@@ -1,0 +1,42 @@
+[
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/level.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/level.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/level.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/logger.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/logger.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/logger.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/main_core.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/main_core.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/main_core.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/physics.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/physics.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/physics.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/simulator.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/simulator.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/simulator.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/switches.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/switches.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/switches.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/util.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/util.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/util.cpp"
+},
+{
+  "directory": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/build",
+  "command": "/usr/bin/g++  -I/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/include -g -std=gnu++17 -o CMakeFiles/last_train.dir/src/core/viewer_iface_core.cpp.o -c /home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/viewer_iface_core.cpp",
+  "file": "/home/tania/Desktop/PF-Project-TheLastTrain-26i0081-26i0037/src/core/viewer_iface_core.cpp"
+}
+]

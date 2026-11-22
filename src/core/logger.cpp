@@ -3,7 +3,6 @@
 #include <iostream>
 using namespace std;
 // File persistence for savegame.txt and game_summary.txt using primitive variables
-
 bool saveGameStateToFile(const char* filename,
                          int playerFloor, int playerRoom,
                          int energy, int time, int score,
