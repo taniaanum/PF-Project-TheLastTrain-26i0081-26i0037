@@ -1,6 +1,7 @@
 #include "physics.h"
 #include "util.h"
 #include "switches.h"
+#include "state.h"
 #include <iostream>
 using namespace std;
 
@@ -65,12 +66,12 @@ char& outConnType){
      }
      // lift 1 
      if ( (fromR == 2 && toR==2) || (fromR == 3 && toR==3) || (fromR == 2 && toR== 3) || (fromR == 3 && toR== 2) )
-       if ( canUseLift1(fromF,toF) )
+      { if ( canUseLift1(fromF,toF) )
         {
             outConnType = CONN_LIFT1 ;
             return true ;
         }
-         
+      }  
      // lift 2
    if (fromR == 4 && toR == 4 && (fromF == 2 || fromF == 4 || fromF == 5) && (toF == 2 || toF == 4 || toF == 5))
         {
@@ -84,10 +85,30 @@ char& outConnType){
             
                          
 
-bool canTraverse(int targetFloor, int targetRoom, char connType,
-                 const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount,
-                 int emergencyTripsLeft, bool lift2Operational){
-                        return true;
+bool canTraverse(int targetFloor, int targetRoom, char connType,const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount,int emergencyTripsLeft, bool lift2Operational)
+{
+  if(targetFloor < 1 || targetFloor > NUM_FLOORS)
+    return false;
+  if(targetRoom < 1 || targetRoom > ROOMS_PER_FLOOR) 
+    return false;
+  if(connType == CONN_NONE)
+    return false;
+  if(connType == CONN_DOOR || connType == CONN_WINDOW || connType == CONN_STAIRS || connType == CONN_LIFT1 ) 
+    return true;
+  if(connType == CONN_LOCKED_DOOR)
+     return unlockFloor3Door(inventory, inventoryCount);
+  if (connType == CONN_LIFT2)
+  {
+     return canUseLift2(targetFloor, targetRoom, lift2Operational, emergencyTripsLeft);
+     // normal way of lift 2 , with power.
+
+     bool normalway = (lift2Operational) && (hasItem(inventory, inventoryCount, ENT_LIFT_PASS));
+     // emergency way of lift 2 , without power.
+
+     bool emergencyway = (emergencyTripsLeft > 0) && (hasItem(inventory, inventoryCount, ENT_LIFT_PASS));
+     return ( normalway || emergencyway)    
+  }
+   return false ;
                  }
 
 

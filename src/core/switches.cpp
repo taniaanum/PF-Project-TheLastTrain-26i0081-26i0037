@@ -25,11 +25,12 @@ bool canUseLift2(int fromFloor, int toFloor, bool lift2Operational, int emergenc
 
 bool unlockFloor3Door(const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount){
    
-   if(hasItem(inventory, inventoryCount, ENT_MASTER_KEY)) return true;
-   
-   
-   
+   if(hasItem(inventory, inventoryCount, ENT_MASTER_KEY))
     return true;
+    return false ; 
+   
+   
+   
 }
 bool installFuseControlPanel(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount,
                              bool objectives[NUM_OBJECTIVES], int& score){
