@@ -9,6 +9,10 @@ const char CONN_DOOR        = 'D'; // Ordinary door
 const char CONN_WINDOW      = 'W'; // Window traversal
 const char CONN_LOCKED_DOOR = 'L'; // Locked door (requires Master Key)
 const char CONN_SOLID_WALL  = '#'; // Wall partition (impassable)
+const char CONN_LIFT1       = '1'; // Lift 1 (floors 1 and 2 only)
+const char CONN_STAIRS      = 'S'; // Staircase
+const char CONN_LIFT2       = '2'; // Lift numbers 2
+const int  EMERGENCY_TRIPS  = 3;   // Emergency Lift 2 rides the card gives
 
 // Entity / Item Character Symbols (Stored in 2D/3D char arrays)
 const char ENT_NONE             = ' ';
