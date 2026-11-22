@@ -1,5 +1,6 @@
 #include "physics.h"
 #include "util.h"
+#include "switches.h"
 #include <iostream>
 using namespace std;
 
@@ -31,17 +32,57 @@ char& outConnType){
          left = toR ;
        
        char gap_type = horizontalConn[fromF-1][left-1];
+         if ( gap_type == CONN_WINDOW || gap_type == CONN_DOOR || gap_type == CONN_LOCKED_DOOR )
+            {
+            
+                outConnType = gap_type ;
+                return true ;
+            }
+        
      }
-       
-
-
-
+       return false ;
     }
-         
+    // stairs
+    int lower = 0 ;
+    int upper = 0 ;
+    if ( fromF > toF)
+    { lower = toF ;
+      upper = fromF ;
+    }
+    if ( fromF < toF )
+      { lower = fromF ;
+        upper = toF ;
+      }
+    if (fromR == 1 && toR==1)
+     {
 
+      if ((lower == 1 && upper == 2 ) || (lower == 2 && upper == 3) || (lower == 4 && upper == 5))
+      {
+        outConnType = CONN_STAIRS;
+          return true ;
+     }
+    return false ;
+     }
+     // lift 1 
+     if ( (fromR == 2 && toR==2) || (fromR == 3 && toR==3) || (fromR == 2 && toR== 3) || (fromR == 3 && toR== 2) )
+       if ( canUseLift1(fromF,toF) )
+        {
+            outConnType = CONN_LIFT1 ;
+            return true ;
+        }
+         
+     // lift 2
+   if (fromR == 4 && toR == 4 && (fromF == 2 || fromF == 4 || fromF == 5) && (toF == 2 || toF == 4 || toF == 5))
+        {
+             outConnType = CONN_LIFT2 ;
+                return true ;
+        }
+        
+     return false;
+}
                              
             
-                         }
+                         
 
 bool canTraverse(int targetFloor, int targetRoom, char connType,
                  const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount,
@@ -49,7 +90,9 @@ bool canTraverse(int targetFloor, int targetRoom, char connType,
                         return true;
                  }
 
-void applyResourceDelta(int& energy, int& time, int deltaEnergy, int deltaTime){
+
+void applyResourceDelta(int& energy, int& time, int deltaEnergy, int deltaTime)
+{
 deltaEnergy = clampInt(deltaEnergy, 0 , MAX_ENERGY);
 deltaTime = clampInt(deltaTime, 0 , MAX_TIME);
 energy += deltaEnergy;
