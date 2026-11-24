@@ -99,16 +99,15 @@ bool canTraverse(int targetFloor, int targetRoom, char connType,const char inven
      return unlockFloor3Door(inventory, inventoryCount);
   if (connType == CONN_LIFT2)
   {
-     return canUseLift2(targetFloor, targetRoom, lift2Operational, emergencyTripsLeft);
      // normal way of lift 2 , with power.
-
      bool normalway = (lift2Operational) && (hasItem(inventory, inventoryCount, ENT_LIFT_PASS));
-     // emergency way of lift 2 , without power.
 
-     bool emergencyway = (emergencyTripsLeft > 0) && (hasItem(inventory, inventoryCount, ENT_LIFT_PASS));
-     return ( normalway || emergencyway)    
+     // emergency way of lift 2 , without power.
+     bool emergencyway = (emergencyTripsLeft > 0) && (hasItem(inventory, inventoryCount, ENT_EMERGENCY_CARD));
+
+     return ( normalway || emergencyway);   
   }
-   return false ;
+    return false ;
                  }
 
 
@@ -120,22 +119,27 @@ energy += deltaEnergy;
 time += deltaTime;  
 
 }
-void applyScoreDelta(int& score, int deltaScore){
+void applyScoreDelta(int& score, int deltaScore)
+{
 score += deltaScore;
 
 }
 
 
-bool hasItem(const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount, char itemSymbol){
-    for(int i=0; i<inventoryCount; i++){
+bool hasItem(const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount, char itemSymbol)
+{
+    for(int i=0; i<inventoryCount; i++)
+    {
         if(inventory[i]==itemSymbol) return true;
     }
     return false;
 }
 
 
-bool addItem(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount, char itemSymbol){
-    if (inventoryCount >= MAX_INVENTORY_CAPACITY) return false;
+bool addItem(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount, char itemSymbol)
+{
+    if (inventoryCount >= MAX_INVENTORY_CAPACITY) 
+    return false;
     inventory[inventoryCount] = itemSymbol;
     inventoryCount++;
     return true;
@@ -147,13 +151,16 @@ bool addItem(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount, char i
 bool removeItem(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount, char itemSymbol)
 {
     int pos = -1;
-     for(int i=0; i<inventoryCount; i++){
+     for(int i=0; i<inventoryCount; i++)
+     {
         if(inventory[i]==itemSymbol) 
         pos = i;
         break;
     }
-   if(pos==-1) return false;
-    for(int i=pos; i<inventoryCount-1; i++){
+   if(pos==-1) 
+   return false;
+    for(int i=pos; i<inventoryCount-1; i++)
+    {
         inventory[i] = inventory[i+1];
     }
     inventoryCount--;
