@@ -249,14 +249,53 @@ const char inventory[MAX_INVENTORY_CAPACITY], int inventoryCount,int& emergencyT
     }
     
 
-bool handleInspectCommand(int currentFloor, int currentRoom,
-                          int& energy, int& time,
-                          const char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM],
-                          int entityCount,
-                          bool objectives[NUM_OBJECTIVES], int& score)
-                          {
-                            return true;
-                          }
+bool handleInspectCommand(int currentFloor, int currentRoom, int& energy, int& time,const char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM],
+int entityCount,bool objectives[NUM_OBJECTIVES], int& score)
+    {
+      if ( currentFloor < 0 || currentFloor > NUM_FLOORS || currentRoom < 0 || currentRoom > ROOMS_PER_FLOOR)
+      return false;
+      if( entityCount < 0 || entityCount > MAX_ENTITIES_PER_ROOM)
+      return false ;
+      applyResourceDelta(energy,time,COST_INSPECT_ENERGY, COST_INSPECT_TIME);
+      for(int i = 0 ; i <= entityCount-1 ; i++)
+      {
+        char symbol = roomEntities[currentRoom-1][currentFloor-1][i];
+        cout << symbol <<" - " << getEntityName(symbol) << endl;
+        if (symbol == ENT_CLUE_4 && !objectives[OBJ_CLUE_4])
+        {
+          objectives[OBJ_CLUE_4] = true ;
+          applyScoreDelta(score,SCORE_CLUE_FOUND);
+          cout << "you found clue digit 4  \n";
+        }
+        if (symbol == ENT_CLUE_2 && !(objectives[OBJ_CLUE_2]))
+        {
+          objectives[OBJ_CLUE_2] = true ;
+          applyScoreDelta(score,SCORE_CLUE_FOUND);
+          cout << "you found clue digit 2  \n";
+        }
+        if (symbol == ENT_CLUE_7 && !objectives[OBJ_CLUE_7])
+        {
+          objectives[OBJ_CLUE_7] = true ;
+          applyScoreDelta(score,SCORE_CLUE_FOUND);
+          cout << "you found clue digit 7  \n ";
+        }
+        if(entityCount==0)
+        cout << "nothing hhere \n";
+        return true;
+      }
+      
+
+     
+    
+    
+    
+    
+    
+    
+    
+    
+      return true;
+    }
 
 bool handleCollectCommand(char itemSymbol, int currentFloor, int currentRoom,
                           int& energy, int& time, int& score,
