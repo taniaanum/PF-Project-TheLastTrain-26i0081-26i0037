@@ -1,6 +1,8 @@
 #include "level.h"
 #include "util.h"
 #include <iostream>
+#include <fstream>
+#include <iomanip>
 using namespace std;
 // Modular implementation using primitive arrays for map parsing and verification
 
@@ -10,7 +12,7 @@ static void placeItem(char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIE
 
     int n = entityCounts[floor-1][room-1];
 
-    if(n < MAX_ENTITIES_PER_ROOM)
+    if(n >= MAX_ENTITIES_PER_ROOM)
     {
         cerr << "Error: Cannot place more entities in room " << room << " on floor " << floor << endl;
         return;
@@ -31,9 +33,7 @@ bool loadBuildingMap(const char* filename,
         {
             entityCounts[f][r] = 0;
             for(int s = 0; s < MAX_ENTITIES_PER_ROOM; ++s)
-            {
                 roomEntities[f][r][s] = ENT_NONE;
-            }
         }
     }
     // Floor 5
@@ -61,7 +61,7 @@ bool loadBuildingMap(const char* filename,
     horizontalConn[0][1] = CONN_LIFT1;
     horizontalConn[0][2] = CONN_DOOR;
 
-        placeItem(roomEntities, entityCounts, 1, 2, ENT_MASTER_KEY);
+    placeItem(roomEntities, entityCounts, 1, 2, ENT_MASTER_KEY);
     placeItem(roomEntities, entityCounts, 1, 4, ENT_ENERGY_PACK);
     placeItem(roomEntities, entityCounts, 2, 3, ENT_EMERGENCY_TOOLKIT);
     placeItem(roomEntities, entityCounts, 3, 2, ENT_CLUE_4);
@@ -79,14 +79,57 @@ bool loadBuildingMap(const char* filename,
     placeItem(roomEntities, entityCounts, 5, 4, ENT_OBSERVATION_TOKEN);
 
     return true;
-                     }
+}
 
 bool loadInitialState(const char* filename,
                       int& playerFloor, int& playerRoom,
                       int& energy, int& time, int& score,
                       char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount,
                       bool objectives[NUM_OBJECTIVES], int& emergencyTripsLeft){
-    return true;}
+    ifstream initialStateFile(filename);
+    if (!initialStateFile) {
+        return false;
+    }
+
+    bool foundEnergy = false, foundTime = false;
+
+    char word[MAX_NAME_LEN];
+    while (initialStateFile >> setw(MAX_NAME_LEN) >> word)
+    {
+        if (stringEquals(word, "INITIAL_ENERGY:"))
+        {
+            if(initialStateFile >> energy)
+                foundEnergy = true;
+        }
+        else if (stringEquals(word, "INITIAL_TIME:"))
+        {
+            if(initialStateFile >> time)
+                foundTime = true;
+        }
+        else if (stringEquals(word, "INITIAL_SCORE:"))
+            initialStateFile >> score;
+    }
+
+    if (!foundEnergy || !foundTime)
+        return false;
+    if (energy <= 0 || energy > MAX_ENERGY)
+        return false;
+    if (time <= 0 || time > MAX_TIME)
+        return false;
+
+    playerFloor = 1;
+    playerRoom = 1;
+    inventoryCount = 0;
+    emergencyTripsLeft = 0;
+    
+    for(int i=0; i <MAX_INVENTORY_CAPACITY; ++i)
+        inventory[i] = ENT_NONE;
+
+    for(int i=0; i<NUM_OBJECTIVES; ++i)
+        objectives[i] = false;
+    
+    return true;
+}
 
 bool validateStartingRoom(int startFloor, int startRoom,
                           const char horizontalConn[NUM_FLOORS][ROOMS_PER_FLOOR - 1]){
@@ -132,6 +175,6 @@ const char* getEntityName(char entitySymbol){
         case ENT_OBSERVATION_TOKEN:
             return "Observation Token";
         default:
-            return "Unknown Entity";
+            return "Unknown";
     }
 }
