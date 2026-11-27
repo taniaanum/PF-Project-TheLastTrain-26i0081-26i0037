@@ -32,12 +32,45 @@ bool unlockFloor3Door(const char inventory[MAX_INVENTORY_CAPACITY], int inventor
    
    
 }
-bool installFuseControlPanel(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount,
-                             bool objectives[NUM_OBJECTIVES], int& score){
-    return true;
+bool installFuseControlPanel(char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount,bool objectives[NUM_OBJECTIVES], int& score)
+{
+ 
+    
+    if(!(hasItem(inventory,inventoryCount,ENT_FUSE)))
+    {
+    cout <<"the fuse is not in the inventory \n";
+   return false;
+    }
+
+ if (objectives[OBJ_FUSE_INSTALLED])
+ {
+    cout << "fuse is already installed \n";
+    return false;
+ }
+  removeItem(inventory,inventoryCount,ENT_FUSE);
+  objectives[OBJ_FUSE_INSTALLED]=true;
+  objectives[OBJ_LIFT2_ACTIVE]=true;
+  applyScoreDelta(score,SCORE_INSTALL_FUSE);
+  return true ;
 }
-bool verifyCabinetCode(const char* enteredCode, const bool objectives[NUM_OBJECTIVES]){
-    return true;
+
+
+bool verifyCabinetCode(const char* enteredCode, const bool objectives[NUM_OBJECTIVES])
+{
+    if(!(objectives[OBJ_CLUE_2] && objectives[OBJ_CLUE_4] &&objectives[OBJ_CLUE_7]))
+    {
+        cout<<"The clues were not found \n";
+        return false;
+    }
+
+    else if ( !(stringEquals(enteredCode,"427")))
+       {
+        cout << "The code is incorrect";
+        return false;
+       }
+    else 
+    return true ;
+    
 }
 
 
