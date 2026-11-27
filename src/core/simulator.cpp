@@ -121,6 +121,8 @@ void runSimulation(int& playerFloor, int& playerRoom,int& energy, int& time, int
 
        if (!cin) //for invalid input
       break;
+
+
       if(stringEquals(command,"quit"))
       break;
       
@@ -159,10 +161,9 @@ void runSimulation(int& playerFloor, int& playerRoom,int& energy, int& time, int
         if (collected && symbol == ENT_EMERGENCY_CARD) 
         {
          emergencyTripsLeft = EMERGENCY_TRIPS;   
-
-      
-      }
-
+         }
+        }
+     
       else if(stringEquals(command,"move"))
       {
       cin >> chosenfloor >> chosenroom;
@@ -179,8 +180,10 @@ void runSimulation(int& playerFloor, int& playerRoom,int& energy, int& time, int
         else // two numbers were read, so try the move
         {
           handleMoveCommand(chosenfloor, chosenroom, playerFloor, playerRoom, energy, time, horizontalConn, inventory, inventoryCount, emergencyTripsLeft,objectives[OBJ_LIFT2_ACTIVE]);
+       
         }
       }
+      
 
       else if(stringEquals(command,"use"))
       {
@@ -207,21 +210,17 @@ void runSimulation(int& playerFloor, int& playerRoom,int& energy, int& time, int
       renderObjectivesChecklist(objectives);
       }
 
+
       else
       {
         cin.ignore(10000,'\n');
        cout << "Invalid command. Type 'help' to see the list of available commands.\n";
       }
-      
-     
-     
-     
-     
-     
-    }
+      }
         
       }
-
+      
+    
 
 
 
@@ -363,33 +362,33 @@ bool handleCollectCommand(char itemSymbol, int currentFloor, int currentRoom,int
 
    if (found==false)
   {
-    cout <<"the item was not found in the room";
+    cout <<"the item was not found in the room \n";
    return false;
   }
   if( itemSymbol == ENT_CAT || itemSymbol == ENT_PASSENGER || itemSymbol == ENT_CONTROL_PANEL ||
        itemSymbol == ENT_CABINET_TRAIN_KEY || itemSymbol == ENT_CLUE_2 || itemSymbol == ENT_CLUE_4 ||  itemSymbol == ENT_CLUE_7)
        {
-        cout << "The item is fixed";
+        cout << "The item is fixed \n";
         return false;
              
       }
   else if (itemSymbol == ENT_ENERGY_PACK )
     {
-      cout <<"the item is an Instant bonus";
+      cout <<"the item is an Instant bonus \n";
       removefromroom(currentFloor,currentRoom,roomEntities,entityCount,itemSymbol);
       applyResourceDelta(energy, time, BONUS_ENERGY_PACK, 0 );
       return true;
     }
   else if (itemSymbol == ENT_EMERGENCY_TOOLKIT )
     {
-       cout <<"the item is an Instant bonus";
+       cout <<"the item is an Instant bonus \n";
       removefromroom(currentFloor,currentRoom,roomEntities,entityCount,itemSymbol);
       applyResourceDelta(energy, time, BONUS_EMERGENCY_TOOLKIT, 0 );
       return true;
     }
   else if (itemSymbol == ENT_OBSERVATION_TOKEN )
     {
-       cout <<"the item is an Instant bonus";
+       cout <<"the item is an Instant bonus \n";
        removefromroom(currentFloor,currentRoom,roomEntities,entityCount,itemSymbol);
       applyResourceDelta(energy, time, 0, BONUS_OBSERVATION_TOKEN );
       return true;
@@ -398,7 +397,7 @@ bool handleCollectCommand(char itemSymbol, int currentFloor, int currentRoom,int
     {
      if (addItem(inventory,inventoryCount,itemSymbol))
     {
-        cout << " The item is collected";
+        cout << " The item is collected \n";
       removefromroom(currentFloor,currentRoom,roomEntities,entityCount, itemSymbol);
       applyResourceDelta(energy,time,COST_ITEM_PICKUP_ENERGY, COST_ITEM_PICKUP_TIME);
       if (itemSymbol== ENT_MASTER_KEY)
@@ -422,7 +421,7 @@ bool handleCollectCommand(char itemSymbol, int currentFloor, int currentRoom,int
     }
      else 
        {
-        cout <<"no space in the  inventory ";
+        cout <<"no space in the  inventory \n ";
         return false ;
        }
      
@@ -433,22 +432,111 @@ bool handleCollectCommand(char itemSymbol, int currentFloor, int currentRoom,int
 
 
 
-bool handleUseCommand(char itemSymbol, int currentFloor, int currentRoom,
-                      int& energy, int& time, int& score,
-                      char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount,
-                      bool objectives[NUM_OBJECTIVES]){
-    return true;
+bool handleUseCommand(char itemSymbol, int currentFloor, int currentRoom,int& energy, int& time, int& score,
+  char inventory[MAX_INVENTORY_CAPACITY], int& inventoryCount, bool objectives[NUM_OBJECTIVES])
+  { if(!(hasItem(inventory,inventoryCount,itemSymbol)))
+    {
+    cout <<"item is not present in the inventory \n";
+    return false;
+    }
+    else if (itemSymbol==ENT_MEDICAL_KIT && currentFloor==4 && currentRoom == 1 && !objectives[OBJ_PASSENGER_RESCUED])
+    {
+      objectives[OBJ_PASSENGER_RESCUED]=true;
+      applyScoreDelta(score,SCORE_RESCUE_PASSENGER);
+      applyResourceDelta(energy,time,COST_ITEM_USE_ENERGY,COST_ITEM_USE_TIME);
+      return true;
+    }
+    else if ( itemSymbol == ENT_CAT_CARRIER && currentFloor == 3 && currentRoom == 3 && !objectives[OBJ_CAT_SECURED])
+    {
+      objectives[OBJ_CAT_SECURED]=true;
+      applyScoreDelta(score,SCORE_SECURE_CAT);
+      applyResourceDelta(energy,time,COST_ITEM_USE_ENERGY,COST_ITEM_USE_TIME);
+      return true;
+    }
+    else if ( itemSymbol == ENT_FUSE && currentFloor == 3 && currentRoom == 4 && !objectives[OBJ_FUSE_INSTALLED])
+    {
+     if (installFuseControlPanel(inventory,inventoryCount,objectives,score))
+     {
+     applyResourceDelta(energy,time,COST_ITEM_USE_ENERGY,COST_ITEM_USE_TIME);
+      return true;
+     }
+     else 
+     {
+      cout << "Nothing happens";
+      return false ;
+    }
+    }
+    else
+    {
+      cout << "Nothing happens";
+      return false;
+    }
+
+ }
+
+bool handleUnlockCabinetCommand(const char* code, int currentFloor, int currentRoom,bool objectives[NUM_OBJECTIVES], int& score,
+char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM],int& entityCount)
+  {
+    if (!(currentFloor==5 && currentRoom==1))
+    {
+      cout << "No cabinet is present in this room";
+      return false;
+    }
+    else if (objectives[OBJ_CABINET_UNLOCKED])
+    {
+      cout << "The cabinet is already unlocked";
+      return false;
+    }
+    else if (verifyCabinetCode(code , objectives))
+    {
+       cout << "the code is correct \n";
+      cout << "the cabinet is opened and we found the train key \n";
+      objectives[OBJ_CABINET_UNLOCKED]=true;
+      applyScoreDelta(score,SCORE_CABINET_UNLOCK);
+      objectives[OBJ_TRAIN_KEY] = true;
+      applyScoreDelta(score , SCORE_TRAIN_KEY);
+      removefromroom(currentFloor,currentRoom,roomEntities,entityCount,ENT_CABINET_TRAIN_KEY);
+      return true;
+    }
+    else 
+    return false;
+
+}  
+
+bool train_boarding(int currentFloor , int currentRoom , bool objectives[NUM_OBJECTIVES],int&score)
+{
+  if (!(currentFloor==5 && currentRoom == 2))
+  {
+    cout << "The train is not here \n";
+    return false;
+  }
+  else if (!(objectives[OBJ_TRAIN_KEY]))
+  {
+    cout << "You need train key \n";
+    return false;
+  }
+  else 
+  {
+    objectives[OBJ_TRAIN_PREPARED]=true;
+    applyScoreDelta(score,SCORE_PREPARE_TRAIN);
+    if (objectives[OBJ_CAT_SECURED] && objectives[OBJ_PASSENGER_RESCUED])
+    {
+      objectives[OBJ_MISSION_WON]=true;
+      applyScoreDelta(score,SCORE_MISSION_VICTORY);
+    }
+
+   return true ;
+  }
 }
 
-bool handleUnlockCabinetCommand(const char* code, int currentFloor, int currentRoom,
-                                bool objectives[NUM_OBJECTIVES], int& score,
-                                char roomEntities[NUM_FLOORS][ROOMS_PER_FLOOR][MAX_ENTITIES_PER_ROOM],
-                                int& entityCount){
-    return true;
-}
-
-bool checkEndConditions(int energy, int time, const bool objectives[NUM_OBJECTIVES]){
-    return true;
+bool checkEndConditions(int energy, int time, const bool objectives[NUM_OBJECTIVES])
+{
+  if ( energy <= 0 || time <= 0  )
+  return true;
+  else if ( objectives[OBJ_TRAIN_PREPARED])
+   return true ;
+  else 
+  return false;
 }
 
 
