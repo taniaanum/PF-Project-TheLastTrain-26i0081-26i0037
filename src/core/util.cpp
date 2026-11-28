@@ -1,8 +1,4 @@
-
-;
 // Primitive helper utilities, clamping, and screen control
-
-
 #include<iostream>
 #include "util.h"
 using namespace std;
@@ -13,8 +9,34 @@ int clampInt(int val, int minVal, int maxVal){
    return val;
 }
 
-void trimWhitespace(char* str){
 
+static bool isWhitespace(char c)
+{
+    return c==' ' || c=='\t' || c=='\n' || c=='\r';
+}
+
+void trimWhitespace(char* str){
+    if(str==nullptr)
+        return;
+
+    int start=0;
+    while(str[start]!='\0' && isWhitespace(str[start]))
+        start++;
+
+    int len=0;
+    while(str[start+len]!='\0')
+    {   
+        str[len]=str[start+len];
+        len++;
+    }
+
+    str[len]='\0';
+    while(len>0 && isWhitespace(str[len-1]))
+    {
+        len--;
+        str[len]='\0';
+        
+    }
 }
 
 
