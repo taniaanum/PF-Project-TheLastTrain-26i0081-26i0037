@@ -1,0 +1,7 @@
+last_train
+last_train.exe
+last_train~
+.DS_Store
+*.o
+build/
+pf project helppp/
